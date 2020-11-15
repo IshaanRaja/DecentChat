@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+}
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+version = '1.0'
+
+sourceSets.main.java.srcDirs = ['src']
+
+jar {
+  manifest {
+    attributes(
+      'Main-Class': 'com.ishaanraja.decentchat.main.Main'
+    )
+  }
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  implementation 'com.google.code.gson:gson:2.8.6'
+  implementation files('libs/WaifUPnP.jar')
+}
+
+task fatJar(type: Jar) {
+  manifest {
+    attributes 'Main-Class': 'com.ishaanraja.decentchat.main.Main'
+  }
+   from (configurations.compileClasspath.collect { entry -> zipTree(entry) }) {
+        exclude 'META-INF/MANIFEST.MF'
+        exclude 'META-INF/*.SF'
+        exclude 'META-INF/*.DSA'
+        exclude 'META-INF/*.RSA'
+    }
+    with jar
+}

@@ -1,0 +1,17 @@
+/bin
+/build
+/lib
+.DS_Store
+*.pem
+*.log
+*.tmp
+peers.txt
+ignorelist.txt
+config.json
+.metadata
+tmp/
+.gradle/
+.settings/
+.recommenders
+.*
+!.gitignore
