@@ -88,6 +88,7 @@ public class NodeManager {
 	private InetAddress internalIP;
 	private DifficultyAdjustmentThread difficultyAdjuster;
 	private HistoryManager historyManager;
+	private boolean online;
 	/**
 	 * This is ONLY used to store messages sent while the client has no peers. Once the client gets peers,
 	 * the messages contained in this queue are sent out.
@@ -112,7 +113,8 @@ public class NodeManager {
 		this.listener = new DecentListener(callback, peers);
 		this.difficultyAdjuster = difficultyAdjuster;
 		this.historyManager = historyManager;
-		noPeersMessageQueue = new LinkedBlockingQueue<Message>();
+		this.noPeersMessageQueue = new LinkedBlockingQueue<Message>();
+		this.online = true;
 		findInternalExternalIP();
 		findPeers();
 	}
@@ -175,7 +177,10 @@ public class NodeManager {
 	private void removePeer(InetAddress peerToRemove) {
 		if(peers.containsKey(peerToRemove)) {
 			peers.remove(peerToRemove);
-			writePeers();
+			//If this NodeManager is shutting down (online == false), no need to remove peers from peers.txt
+			if(online) {
+				writePeers();
+			}
 		}
 	}
 	/**
@@ -440,6 +445,7 @@ public class NodeManager {
 		//We call peers.values() and put into Array to create an unchanging copy, one that
 		//does not shrink even as the sockets remove themselves from the peers list
 		//this prevents a ConcurrentModificationException
+		online = false;
 		ArrayList<DecentSocket> connections = new ArrayList<DecentSocket>(peers.values());
 		for(DecentSocket socket: connections) {
 			socket.stop();

@@ -32,7 +32,7 @@ public class HashUtils {
 	}
 	
 	/**
-	 * Returns the first 10 characters (80 bits) of the hexadecimal representation
+	 * Returns the first 10 characters of the hexadecimal representation
 	 * of SHA-256 hash of the public key. 
 	 * 
 	 * @param pubKey A String containing base 64 encoded RSA public key
